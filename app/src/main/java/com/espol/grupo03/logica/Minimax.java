@@ -123,6 +123,9 @@ public class Minimax {
 
             int utilidadMinima;
 
+            //Aqui vamos a guardar las respuestas q se analizaron para la posible jugada de la computadora
+            ArrayList<AnalisisRespuesta> respuestasAnalizadas = new ArrayList<>();
+
 
             /*
             Si el hijo es hoja puede ser porque el tablero
@@ -143,47 +146,57 @@ public class Minimax {
                 */
                 utilidadMinima = Integer.MAX_VALUE;
 
+                //Servirá para saber si alguna de las respuestas
+                //hace ganar al humano
+                boolean hayDerrotaInmediata = false;
+
 
                 for (Tree<Tablero> respuesta : hijo.getRoot().getChildren()) {
 
                     Tablero tableroRespuesta = respuesta.getRoot().getContent();
 
-
-                    /*
-                    Si una de las respuestas del oponente
-                    hace que gane inmediatamente,
-                    esta sería la peor respuesta posible
-                    para la computadora.
-
-                    Por eso esa jugada de la computadora
-                    debe recibir un valor extremadamente bajo.
-                    */
-                    if (tableroRespuesta.isWinner(simboloOponente)) {
-
-                        utilidadMinima = Integer.MIN_VALUE;
-
-                        break;
-                    }
-
-
-                    //Si nadie gano, calculamos normalmente
-                    //la utilidad del tablero
+                    //Calculamos la utilidad de esta R. que puede hacer el oponente
                     int utilidad = tableroRespuesta.calculateUtility(simboloComputadora);
 
+                    //Guardamos el tablero de la respuesta con la utilidad
+                    AnalisisRespuesta analisisRespuesta = new AnalisisRespuesta(tableroRespuesta, utilidad);
 
-                    //Cambiamos de utilidad si encontramos
-                    //una menor a la calculada anteriormente
-                    if (utilidad < utilidadMinima) {
+                    respuestasAnalizadas.add(analisisRespuesta);
 
-                        utilidadMinima = utilidad;
+                    /*
+                    si esta respuesta hace ganar al humano, esto se marca como derrota inmediata
+
+                    */
+                    if (tableroRespuesta.isWinner(simboloOponente)) {
+                        hayDerrotaInmediata = true;
+                    } else {
+                        if (utilidad < utilidadMinima) {
+                            utilidadMinima = utilidad;
+                        }
                     }
                 }
+                /*Si por lo menos una respuesta permite que el humano
+                gana inmediatamente, la jugada de la compu se considera
+                derrota inmediata
+                 */
+                if (hayDerrotaInmediata) {
+                    utilidadMinima = Integer.MIN_VALUE;
+                }
             }
-            //Guardamos el tablero que representa esta posible jugada
-            //junto con la utilidad minima que obtuvo su familia
-            AnalisisJugada analisis = new AnalisisJugada(tableroHijo, utilidadMinima, false);
+                //Guardamos el tablero que representa esta posible jugada
+                //junto con la utilidad minima que obtuvo su familia
+                AnalisisJugada analisis = new AnalisisJugada(tableroHijo, utilidadMinima, false);
 
-            analisisUltimaJugada.add(analisis);
+                /*Vamos a agg las respuestas que pertenecen a esa jugada de la computadora
+
+                 */
+
+                for (AnalisisRespuesta respuestaAnalizada : respuestasAnalizadas) {
+                    analisis.addRespuesta(respuestaAnalizada);
+
+                }
+
+                analisisUltimaJugada.add(analisis);
 
             /*
             Ahora buscamos el MAX entre todas
@@ -193,25 +206,25 @@ public class Minimax {
             mejor que la maxima anterior,
             esta pasa a ser nuestra nueva mejor jugada.
             */
-            if (utilidadMinima > utilidadMaxima) {
+                if (utilidadMinima > utilidadMaxima) {
 
-                utilidadMaxima = utilidadMinima;
+                    utilidadMaxima = utilidadMinima;
 
-                //Las anteriores dejan de ser las mejores
-                mejoresJugadas.clear();
+                    //Las anteriores dejan de ser las mejores
+                    mejoresJugadas.clear();
 
-                mejoresJugadas.add(hijo);
+                    mejoresJugadas.add(hijo);
 
-            } else if (utilidadMinima == utilidadMaxima) {
+                } else if (utilidadMinima == utilidadMaxima) {
 
                 /*
                 Si tiene exactamente la misma utilidad maxima,
                 tambien la guardamos porque las dos
                 son consideradas igualmente buenas por Minimax.
                 */
-                mejoresJugadas.add(hijo);
+                    mejoresJugadas.add(hijo);
+                }
             }
-        }
 
 
         /*
@@ -223,31 +236,33 @@ public class Minimax {
         Solo escoge entre las jugadas que Minimax ya considero
         como las mejores.
         */
-        Random random = new Random();
+            Random random = new Random();
 
-        int posicionAleatoria = random.nextInt(mejoresJugadas.size());
-
-
-        Tree<Tablero> jugadaElegida = mejoresJugadas.get(posicionAleatoria);
+            int posicionAleatoria = random.nextInt(mejoresJugadas.size());
 
 
-        Tablero estadoElegido = jugadaElegida.getRoot().getContent();
+            Tree<Tablero> jugadaElegida = mejoresJugadas.get(posicionAleatoria);
 
-        //Recorremos los analisis para encontrar
-        //cual fue la jugada que finalmente escogio la computadora
-        for (AnalisisJugada analisis : analisisUltimaJugada) {
 
-            if (analisis.getTablero() == estadoElegido) {
+            Tablero estadoElegido = jugadaElegida.getRoot().getContent();
 
-                analisis.setElegida(true);
-                break;
+            //Recorremos los analisis para encontrar
+            //cual fue la jugada que finalmente escogio la computadora
+            for (AnalisisJugada analisis : analisisUltimaJugada) {
+
+                if (analisis.getTablero() == estadoElegido) {
+
+                    analisis.setElegida(true);
+                    break;
+                }
             }
-        }
 
-        //Finalmente obtenemos la fila y columna
-        //que cambiaron respecto al tablero original
-        return obtenerMovimiento(tableroActual, estadoElegido);
+            //Finalmente obtenemos la fila y columna
+            //que cambiaron respecto al tablero original
+            return obtenerMovimiento(tableroActual, estadoElegido);
+
     }
+
 
 
     //Compararemos los tableros con el original

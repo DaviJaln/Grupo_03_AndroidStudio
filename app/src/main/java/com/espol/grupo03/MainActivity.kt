@@ -45,6 +45,10 @@ import androidx.compose.ui.unit.sp
 import com.espol.grupo03.logica.Partida
 import com.espol.grupo03.modelo.Tablero
 import com.espol.grupo03.ui.theme.Grupo_03Theme
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material3.MaterialTheme
 
 
 private val FondoSuperior = Color(0xFF111827)
@@ -100,11 +104,7 @@ fun AplicacionTresEnRaya() {
                         'X'
                     }
 
-                val nuevaPartida = Partida(
-                    simboloHumano,
-                    simboloComputadora,
-                    iniciaHumano
-                )
+                val nuevaPartida = Partida(simboloHumano, simboloComputadora, iniciaHumano)
 
                 if (!iniciaHumano) {
 
@@ -117,10 +117,7 @@ fun AplicacionTresEnRaya() {
 
     } else {
 
-        PantallaJuego(
-            partida = partida!!,
-
-            onNuevaPartida = {
+        PantallaJuego(partida = partida!!, onNuevaPartida = {
                 partida = null
             }
         )
@@ -144,36 +141,22 @@ fun PantallaInicio(
     FondoAplicacion {
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 28.dp),
+            modifier = Modifier.fillMaxSize().padding(horizontal = 28.dp),
 
             horizontalAlignment = Alignment.CenterHorizontally,
 
             verticalArrangement = Arrangement.Center
         ) {
 
-            Text(
-                text = "TRES EN RAYA",
-                color = TextoPrincipal,
-                fontSize = 38.sp,
-                fontWeight = FontWeight.Bold
-            )
+            Text(text = "Grupo 03 presenta", color = TextoPrincipal, fontSize = 38.sp, fontWeight = FontWeight.Bold)
 
-            Text(
-                text = "Humano vs Computadora",
-                color = TextoSecundario,
-                fontSize = 17.sp
-            )
+            Text(text = "Tres En Raya", color = TextoSecundario, fontSize = 17.sp)
 
 
-            Spacer(
-                modifier = Modifier.height(45.dp)
-            )
+            Spacer(modifier = Modifier.height(45.dp))
 
 
-            Card(
-                modifier = Modifier.fillMaxWidth(),
+            Card(modifier = Modifier.fillMaxWidth(),
 
                 shape = RoundedCornerShape(24.dp),
 
@@ -190,22 +173,17 @@ fun PantallaInicio(
                 ) {
 
                     Text(
-                        text = "Elige tu símbolo",
+                        text = "Elige X | O",
                         color = TextoPrincipal,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.SemiBold
                     )
 
 
-                    Spacer(
-                        modifier = Modifier.height(20.dp)
-                    )
+                    Spacer(modifier = Modifier.height(20.dp))
 
 
-                    Row(
-                        horizontalArrangement =
-                            Arrangement.Center
-                    ) {
+                    Row(horizontalArrangement = Arrangement.Center) {
 
                         OpcionSimbolo(
                             simbolo = 'X',
@@ -221,16 +199,11 @@ fun PantallaInicio(
                         )
 
 
-                        Spacer(
-                            modifier = Modifier.width(18.dp)
-                        )
+                        Spacer(modifier = Modifier.width(18.dp))
 
 
-                        OpcionSimbolo(
-                            simbolo = 'O',
-
-                            seleccionado =
-                                simboloSeleccionado == 'O',
+                        OpcionSimbolo(simbolo = 'O',
+                            seleccionado = simboloSeleccionado == 'O',
 
                             colorSimbolo = RojoO,
 
@@ -241,13 +214,11 @@ fun PantallaInicio(
                     }
 
 
-                    Spacer(
-                        modifier = Modifier.height(32.dp)
-                    )
+                    Spacer(modifier = Modifier.height(32.dp))
 
 
                     Text(
-                        text = "¿Quién comienza?",
+                        text = "¿Quién Inicia?",
                         color = TextoPrincipal,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.SemiBold
@@ -298,32 +269,20 @@ fun PantallaInicio(
             )
 
 
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(58.dp),
+            Button(modifier = Modifier.fillMaxWidth().height(58.dp),
 
                 shape = RoundedCornerShape(18.dp),
 
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = VerdePrincipal,
-                    contentColor = Color(0xFF06220F)
+                colors = ButtonDefaults.buttonColors(containerColor = VerdePrincipal, contentColor = Color(0xFF06220F)
                 ),
 
                 onClick = {
 
-                    onComenzar(
-                        simboloSeleccionado,
-                        iniciaHumano
-                    )
+                    onComenzar(simboloSeleccionado, iniciaHumano)
                 }
             ) {
 
-                Text(
-                    text = "COMENZAR PARTIDA",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
+                Text(text = "Iniciar Partida", fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
         }
     }
@@ -339,22 +298,12 @@ fun OpcionSimbolo(
 ) {
 
     Surface(
-        modifier = Modifier
-            .size(105.dp)
-            .clickable {
-                onClick()
-            }
-            .then(
-                if (seleccionado) {
+        modifier = Modifier.size(105.dp).clickable { onClick() }
+            .then(if (seleccionado) {
 
-                    Modifier.border(
-                        width = 3.dp,
-                        color = colorSimbolo,
-                        shape = RoundedCornerShape(22.dp)
-                    )
+                    Modifier.border(width = 3.dp, color = colorSimbolo, shape = RoundedCornerShape(22.dp))
 
                 } else {
-
                     Modifier
                 }
             ),
@@ -369,16 +318,9 @@ fun OpcionSimbolo(
             }
     ) {
 
-        Box(
-            contentAlignment = Alignment.Center
-        ) {
+        Box(contentAlignment = Alignment.Center) {
 
-            Text(
-                text = simbolo.toString(),
-                color = colorSimbolo,
-                fontSize = 52.sp,
-                fontWeight = FontWeight.Bold
-            )
+            Text(text = simbolo.toString(), color = colorSimbolo, fontSize = 52.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -393,11 +335,7 @@ fun OpcionInicio(
 ) {
 
     Surface(
-        modifier = modifier
-            .height(58.dp)
-            .clickable {
-                onClick()
-            },
+        modifier = modifier.height(58.dp).clickable { onClick() },
 
         shape = RoundedCornerShape(16.dp),
 
@@ -460,10 +398,7 @@ fun PantallaJuego(
 
     FondoAplicacion {
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 24.dp),
+        Column(modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
 
             horizontalAlignment = Alignment.CenterHorizontally,
 
@@ -471,33 +406,23 @@ fun PantallaJuego(
         ) {
 
             Text(
-                text = "TRES EN RAYA",
+                text = "Tres En Raya",
                 color = TextoPrincipal,
                 fontSize = 34.sp,
                 fontWeight = FontWeight.Bold
             )
 
 
-            Text(
-                text = "Humano vs Computadora",
-                color = TextoSecundario,
-                fontSize = 15.sp
-            )
+            Text(text = "Humano vs Computadora", color = TextoSecundario, fontSize = 15.sp)
 
 
-            Spacer(
-                modifier = Modifier.height(22.dp)
-            )
+            Spacer(modifier = Modifier.height(22.dp))
 
 
-            EstadoPartida(
-                partida = partida
-            )
+            EstadoPartida(partida = partida, version = versionTablero)
 
 
-            Spacer(
-                modifier = Modifier.height(25.dp)
-            )
+            Spacer(modifier = Modifier.height(25.dp))
 
 
             TableroGrafico(
@@ -506,11 +431,7 @@ fun PantallaJuego(
 
                 onCasillaClick = { fila, columna ->
 
-                    val jugadaHumano =
-                        partida.jugarHumano(
-                            fila,
-                            columna
-                        )
+                    val jugadaHumano = partida.jugarHumano(fila, columna)
 
                     if (jugadaHumano) {
 
@@ -539,16 +460,11 @@ fun PantallaJuego(
             )
 
 
-            Spacer(
-                modifier = Modifier.height(28.dp)
-            )
+            Spacer(modifier = Modifier.height(28.dp))
 
 
             //Boton para mostrar el analisis realizado por Minimax
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(52.dp),
+            Button(modifier = Modifier.fillMaxWidth().height(52.dp),
 
                 shape = RoundedCornerShape(18.dp),
 
@@ -557,10 +473,7 @@ fun PantallaJuego(
                         .getAnalisisUltimaJugada()
                         .isNotEmpty(),
 
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF334155),
-                    contentColor = TextoPrincipal
-                ),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF334155), contentColor = TextoPrincipal),
 
                 onClick = {
 
@@ -568,37 +481,23 @@ fun PantallaJuego(
                 }
             ) {
 
-                Text(
-                    text = "VER ANÁLISIS",
-                    fontWeight = FontWeight.Bold
-                )
+                Text(text = "VER ANÁLISIS", fontWeight = FontWeight.Bold)
             }
 
 
-            Spacer(
-                modifier = Modifier.height(12.dp)
-            )
+            Spacer(modifier = Modifier.height(12.dp))
 
 
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(52.dp),
+            Button(modifier = Modifier.fillMaxWidth().height(52.dp),
 
                 shape = RoundedCornerShape(18.dp),
 
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = VerdePrincipal,
-                    contentColor = Color(0xFF06220F)
-                ),
+                colors = ButtonDefaults.buttonColors(containerColor = VerdePrincipal, contentColor = Color(0xFF06220F)),
 
                 onClick = onNuevaPartida
             ) {
 
-                Text(
-                    text = "NUEVA PARTIDA",
-                    fontWeight = FontWeight.Bold
-                )
+                Text(text = "NUEVA PARTIDA", fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -641,17 +540,12 @@ fun PantallaJuego(
 
             title = {
 
-                Text(
-                    text = tituloResultado,
-                    fontWeight = FontWeight.Bold
-                )
+                Text(text = tituloResultado, fontWeight = FontWeight.Bold)
             },
 
             text = {
 
-                Text(
-                    text = mensajeResultado
-                )
+                Text(text = mensajeResultado)
             },
 
             confirmButton = {
@@ -687,35 +581,165 @@ fun PantallaJuego(
 
     //Ventana donde mostraremos el analisis realizado
     //por la computadora durante su ultimo turno
+    //Ventana donde mostraremos el analisis realizado
+//por la computadora durante su ultimo turno
     if (mostrarAnalisis) {
 
-        val analisis =
-            partida.getAnalisisUltimaJugada()
+        val analisis = partida.getAnalisisUltimaJugada()
 
 
-        AlertDialog(
-
-            onDismissRequest = {
-
-                mostrarAnalisis = false
-            },
+        AlertDialog(onDismissRequest = { mostrarAnalisis = false },
 
             title = {
-
-                Text(
-                    text = "ANÁLISIS DE LA COMPUTADORA",
-                    fontWeight = FontWeight.Bold
-                )
+                Text(text = "ANÁLISIS DE LA COMPUTADORA", fontWeight = FontWeight.Bold)
             },
 
             text = {
 
-                Text(
-                    text =
-                        "La computadora analizó " +
-                                analisis.size +
-                                " posibles jugadas."
-                )
+                if (analisis.isNotEmpty()) {
+
+                    Column(modifier = Modifier.heightIn(max = 500.dp).verticalScroll(rememberScrollState()),
+
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
+                        Text(text = "La computadora analizó " + analisis.size + " posibles jugadas.")
+
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+
+                        //Recorremos todas las jugadas
+                        //que analizo la computadora
+                        analisis.forEachIndexed { indice, jugada ->
+
+
+                            Text(text = "Jugada ${indice + 1}", fontWeight = FontWeight.Bold)
+
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+
+                            //Mostramos el tablero que podria
+                            //generar la computadora
+                            MiniTablero(tablero = jugada.getTablero())
+
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+
+                            //Este es el MIN encontrado entre
+                            //las respuestas de esta familia
+                            if (jugada.getUtilidadMinima() == Integer.MIN_VALUE) {
+                                Text(text = "Resultado: ⚠ Derrota posible",
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color(0xFFFACC15)                                )
+                            } else {
+                                Text(
+                                    text = "Utilidad mínima: ${jugada.getUtilidadMinima()}",
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+
+
+                            //Si Minimax escogio esta jugada
+                            //la marcamos en la pantalla
+                            if (jugada.isElegida()) {
+
+                                Spacer(modifier = Modifier.height(6.dp))
+
+                                Text(text = "✓ Jugada Elegida",
+
+                                    fontWeight = FontWeight.Bold,
+
+                                    color = VerdePrincipal)
+                            }
+
+
+                            Spacer(
+                                modifier =
+                                    Modifier.height(18.dp)
+                            )
+
+
+                            /*
+                            Debajo de cada jugada de la computadora
+                            mostraremos las respuestas que podria
+                            hacer el humano.
+                            */
+                            if (jugada.getRespuestas().isNotEmpty()) {
+
+
+                                Text(text = "Respuestas Del Humano",
+
+                                    fontWeight = FontWeight.Bold,
+
+                                    color = TextoSecundario
+                                )
+
+
+
+                                Spacer(modifier = Modifier.height(12.dp))
+
+
+                                //Recorremos las respuestas
+                                //que pertenecen a esta familia
+                                jugada.getRespuestas().forEachIndexed { indiceRespuesta, respuesta ->
+
+
+                                        Text(text = "Respuesta " + "${indiceRespuesta + 1}",
+
+                                            fontWeight = FontWeight.SemiBold)
+
+
+                                        Spacer(modifier = Modifier.height(8.dp))
+
+
+                                        //Mostramos el tablero generado
+                                        //por esa respuesta del humano
+                                        MiniTablero(tablero = respuesta.getTablero())
+
+
+                                        Spacer(modifier = Modifier.height(8.dp))
+
+
+                                        //Mostramos la utilidad individual
+                                        //de esta respuesta
+                                        Text(text = "Utilidad: " + respuesta.getUtilidad())
+                                        if(respuesta.getTablero().isWinner(partida.getSimboloHumano())){
+                                            Spacer(modifier= Modifier.height(6.dp))
+                                            Text(text = "Victoria del humano DX ERROR 404",
+                                                color = RojoO,
+                                                fontWeight = FontWeight.Bold,
+                                            )
+
+                                        }
+
+                                        Spacer(modifier = Modifier.height(18.dp))
+                                    }
+
+                            } else {
+
+                                /*
+                                Puede ocurrir que no existan respuestas
+                                porque la computadora gano directamente
+                                o porque el tablero termino.
+                                */
+                                Text(
+                                    text =
+                                        "No existen respuestas posteriores.",
+
+                                    color =
+                                        TextoSecundario
+                                )
+                            }
+
+
+                            //Separamos una familia de la siguiente
+                            Spacer(modifier = Modifier.height(32.dp))
+                        }
+                    }
+                }
             },
 
             confirmButton = {
@@ -737,55 +761,41 @@ fun PantallaJuego(
 
 @Composable
 fun EstadoPartida(
-    partida: Partida
+    partida: Partida,
+    version: Int
 ) {
+    key(version){
 
-    Card(
-        shape = RoundedCornerShape(18.dp),
+        Card(shape = RoundedCornerShape(18.dp),
 
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF172033)
-        )
-    ) {
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = 22.dp,
-                    vertical = 16.dp
-                ),
-
-            contentAlignment = Alignment.Center
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF172033))
         ) {
 
-            when {
+            Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 16.dp),
 
-                partida.esEmpate() -> {
+                contentAlignment = Alignment.Center
+            ) {
 
-                    Text(
-                        text = "EMPATE",
-                        color = TextoPrincipal,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                when {
+
+                    partida.esEmpate() -> {
+
+                        Text(text = "EMPATE", color = TextoPrincipal, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                    }
 
 
-                partida.obtenerGanador() != Tablero.vacio -> {
+                    partida.obtenerGanador() != Tablero.vacio -> {
 
-                    val ganador =
-                        partida.obtenerGanador()
+                        val ganador = partida.obtenerGanador()
 
-                    Text(
-                        text = "GANADOR: $ganador",
+                        Text(text = "GANADOR: $ganador",
 
-                        color =
-                            if (ganador == 'X') {
-                                AzulX
-                            } else {
-                                RojoO
-                            },
+                            color =
+                                if (ganador == 'X') {
+                                    AzulX
+                                } else {
+                                    RojoO
+                                       },
 
                         fontSize = 22.sp,
 
@@ -794,25 +804,22 @@ fun EstadoPartida(
                 }
 
 
-                else -> {
+                    else -> {
 
-                    val turno =
-                        partida.getTurnoActual()
+                        val turno = partida.getTurnoActual()
 
-                    Text(
-                        text = "Turno: $turno",
-
-                        color =
-                            if (turno == 'X') {
-                                AzulX
+                        Text(text = "Turno: $turno",
+                            color = if (turno == 'X') {
+                            AzulX
                             } else {
                                 RojoO
                             },
 
-                        fontSize = 21.sp,
+                            fontSize = 21.sp,
 
-                        fontWeight = FontWeight.Bold
-                    )
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }
@@ -829,60 +836,31 @@ fun TableroGrafico(
 
     key(version) {
 
-        Column(
-            modifier = Modifier.size(310.dp),
+        Column(modifier = Modifier.size(310.dp),
 
-            verticalArrangement =
-                Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
             for (fila in 0 until Tablero.tamanio) {
 
-                Row(
-                    modifier = Modifier.weight(1f),
-
+                Row(modifier = Modifier.weight(1f),
                     horizontalArrangement =
                         Arrangement.spacedBy(8.dp)
                 ) {
 
                     for (columna in 0 until Tablero.tamanio) {
 
-                        val contenido =
-                            partida
-                                .getTablero()
-                                .obtenerCasilla(
-                                    fila,
-                                    columna
-                                )
+                        val contenido = partida.getTablero().obtenerCasilla(fila, columna)
 
-                        val habilitada =
-                            contenido == Tablero.vacio
-                                    &&
-                                    !partida.partidaTerminada()
+                        val habilitada = contenido == Tablero.vacio && !partida.partidaTerminada()
 
 
-                        Surface(
-                            modifier = Modifier
-                                .weight(1f)
-                                .aspectRatio(1f)
-                                .clickable(
-                                    enabled = habilitada
-                                ) {
-
-                                    onCasillaClick(
-                                        fila,
-                                        columna
-                                    )
+                        Surface(modifier = Modifier.weight(1f).aspectRatio(1f).clickable(enabled = habilitada) {
+                                    onCasillaClick(fila, columna)
                                 }
-                                .border(
-                                    width = 1.dp,
-                                    color = BordeCasilla,
-                                    shape =
-                                        RoundedCornerShape(18.dp)
-                                ),
+                                .border(width = 1.dp, color = BordeCasilla, shape = RoundedCornerShape(18.dp)),
 
-                            shape =
-                                RoundedCornerShape(18.dp),
+                            shape = RoundedCornerShape(18.dp),
 
                             color =
                                 if (habilitada) {
@@ -892,17 +870,11 @@ fun TableroGrafico(
                                 }
                         ) {
 
-                            Box(
-                                contentAlignment =
-                                    Alignment.Center
-                            ) {
+                            Box(contentAlignment = Alignment.Center) {
 
                                 if (contenido != Tablero.vacio) {
 
-                                    Text(
-                                        text =
-                                            contenido.toString(),
-
+                                    Text(text = contenido.toString(),
                                         color =
                                             if (contenido == 'X') {
                                                 AzulX
@@ -924,6 +896,59 @@ fun TableroGrafico(
         }
     }
 }
+@Composable
+fun MiniTablero(
+    tablero: Tablero
+) {
+
+    Column(modifier = Modifier.size(150.dp),
+
+        verticalArrangement = Arrangement.spacedBy(4.dp)) {
+
+        for (fila in 0 until Tablero.tamanio) {
+
+            Row(modifier = Modifier.weight(1f),
+
+                horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+
+                for (columna in 0 until Tablero.tamanio) {
+
+                    val contenido = tablero.obtenerCasilla(fila, columna)
+
+
+                    Surface(modifier = Modifier.weight(1f).aspectRatio(1f).border(width = 1.dp, color = BordeCasilla,
+                                shape = RoundedCornerShape(8.dp)),
+
+                        shape = RoundedCornerShape(8.dp),
+
+                        color = CasillaLibre) {
+
+                        Box(contentAlignment = Alignment.Center) {
+
+                            if (contenido != Tablero.vacio) {
+
+                                Text(text = contenido.toString(),
+
+                                    color =
+                                        if (contenido == 'X') {
+                                            AzulX
+                                        } else {
+                                            RojoO
+                                        },
+
+                                    fontSize = 25.sp,
+
+                                    fontWeight =
+                                        FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 
 @Composable
@@ -932,16 +957,8 @@ fun FondoAplicacion(
 ) {
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush =
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            FondoSuperior,
-                            FondoInferior
-                        )
-                    )
+        modifier = Modifier.fillMaxSize().background(
+                brush = Brush.verticalGradient(colors = listOf(FondoSuperior, FondoInferior))
             )
     ) {
 

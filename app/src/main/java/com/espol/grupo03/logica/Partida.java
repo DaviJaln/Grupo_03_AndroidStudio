@@ -112,6 +112,10 @@ public class Partida {
 
         return minimax.getAnalisisUltimaJugada();
     }
+    public char getSimboloHumano(){
+        return simboloHumano;
+    }
+
 
 
 
