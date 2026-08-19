@@ -106,6 +106,23 @@ public class Partida {
     public boolean esEmpate(){
         return tablero.isFull()&&!tablero.isWinner(simboloHumano)&&!tablero.isWinner(simboloComputadora);
     }
+    //Metodo para recomendar jugada
+    public int[] recomendarJugadaHumano(){
+        //solo recomendaremos si le toca al humano o la partirda ya terminó
+        if(turnoActual!=simboloHumano||partidaTerminada()){
+            return null;
+        }
+        /*Creamos un minimax adicional para esta recomendacion
+        no queremos afectar el minimax de la computadora
+         */
+        Minimax minimaxRecomendacion=  new Minimax();
+        /*COnsideramos al humano como jugador que busca maximizar su utilidad
+        por eso invertimos los simbolos respecto al minimax normal de la computadora
+
+         */
+        return minimaxRecomendacion.obtenerMejorMovimiento(tablero,simboloHumano,simboloComputadora);
+
+    };
     //Nos permitirá obtener desde la partida
     //el ultimo analisis realizado por la computadora
     public ArrayList<AnalisisJugada> getAnalisisUltimaJugada() {
